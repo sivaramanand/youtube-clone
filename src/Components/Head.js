@@ -1,12 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { toggleMenu } from "../ultils/appSlice";
+import { YOUTUBE_SEARCH_API, GOOGLE_API_KEY } from "../ultils/constants";
 const Head = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => getSearchSugesstions(), 1000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchQuery]);
+
+  const getSearchSugesstions = async () => {
+    console.log(searchQuery);
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${searchQuery}&key=${GOOGLE_API_KEY}`;
+
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+
+      if (Array.isArray(data.items) && data.items.length > 0) {
+        const titles = data.items.map((item) => item.snippet.title);
+        console.log(titles);
+      } else {
+        console.error("No search suggestions found.");
+      }
+    } catch (error) {
+      console.error("Error fetching search suggestions:", error);
+    }
+  };
+
   const dispatch = useDispatch();
+
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
+
   return (
     <div className="grid grid-flow-col p-5 m-2 shadow-lg">
       <div className="flex col-span-1 text-center">
@@ -29,6 +61,8 @@ const Head = () => {
           type="text"
           className="w-1/2 h-10 border border-gray-400 p-2 rounded-l-full"
           style={{ verticalAlign: "middle" }}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button
           className="border h-10 border-gray-400 p-2 rounded-r-full "
