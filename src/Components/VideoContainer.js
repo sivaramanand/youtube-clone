@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { YOUTUBE_VIDEOS_API } from "../ultils/constants";
 import { Link } from "react-router-dom";
-import VideoCard, { adVideoCard } from "./VideoCard";
+import VideoCard from "./VideoCard";
 import axios from "axios";
 
 const VideoContainer = () => {
