@@ -5,9 +5,14 @@ import { toggleMenu } from "../ultils/appSlice";
 import { GOOGLE_API_KEY } from "../ultils/constants";
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [titles, setTitles] = useState([]);
 
   useEffect(() => {
-    const timer = setTimeout(() => getSearchSugesstions(), 1000);
+    if (searchQuery.trim() === "") {
+      return;
+    }
+
+    const timer = setTimeout(() => getSearchSugesstions(), 1500);
 
     return () => {
       clearTimeout(timer);
@@ -23,7 +28,8 @@ const Head = () => {
       const data = await response.json();
 
       if (Array.isArray(data.items) && data.items.length > 0) {
-        const titles = data.items.map((item) => item.snippet.title);
+        const subtitles = data.items.map((item) => item.snippet.title);
+        setTitles(subtitles);
         console.log(titles);
       } else {
         console.error("No search suggestions found.");
@@ -55,7 +61,7 @@ const Head = () => {
         ></img>
       </div>
 
-      <div className="col-span-10 text-sm">
+      <div className="col-span-10 text-sm relative">
         <input
           placeholder="search"
           type="text"
@@ -70,6 +76,20 @@ const Head = () => {
         >
           <FaSearch />
         </button>
+        {(titles.length > 0 && searchQuery.length>0) && ( // Check if titles array is not empty
+          <div className="absolute bg-white px-2 py-5 w-1/2 z-10">
+            <ul>
+              <li className="px-2 py-2 ">
+                {titles.map((videotitles, index) => (
+                  <div key={index} className="flex items-center ">
+                    <FaSearch className="mr-1" />
+                    {videotitles}
+                  </div>
+                ))}
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
       <div className="col-span-1 text-center">
         <img
