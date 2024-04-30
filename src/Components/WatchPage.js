@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { closeMenu } from "../ultils/appSlice";
-import {  useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
+import CommentSection from "./CommentSection";
 const WatchPage = () => {
   const [searchParams] = useSearchParams();
   console.log(searchParams.get("v"));
@@ -10,10 +11,10 @@ const WatchPage = () => {
     dispatch(closeMenu());
   }, []);
   return (
-    <div>
+    <div className="pl-6 pt-6">
       <iframe
-        width="560"
-        height="315"
+        width="660"
+        height="415"
         src={"https://www.youtube.com/embed/" + searchParams.get("v")}
         title="YouTube video player"
         frameborder="0"
@@ -21,6 +22,7 @@ const WatchPage = () => {
         referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
       ></iframe>
+      <CommentSection />
     </div>
   );
 };

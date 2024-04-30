@@ -1,24 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { toggleMenu } from "../ultils/appSlice";
 import { GOOGLE_API_KEY } from "../ultils/constants";
+import { json } from "react-router-dom";
+import { cacheResults } from "../ultils/searchSlice";
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [titles, setTitles] = useState([]);
-
+  const [showSugesstions, setShowSuggestions] = useState(true);
+  const SearchCache = useSelector((store) => store.search);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (searchQuery.trim() === "") {
       return;
     }
-
-    const timer = setTimeout(() => getSearchSugesstions(), 1500);
-
+    const timer = setTimeout(() => getSearchSugesstions(), 1600);
+    if (SearchCache[searchQuery]) {
+      setShowSuggestions(SearchCache[searchQuery]);
+    } else {
+      getSearchSugesstions();
+    }
     return () => {
       clearTimeout(timer);
     };
   }, [searchQuery]);
-
   const getSearchSugesstions = async () => {
     console.log(searchQuery);
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${searchQuery}&key=${GOOGLE_API_KEY}`;
@@ -31,6 +38,11 @@ const Head = () => {
         const subtitles = data.items.map((item) => item.snippet.title);
         setTitles(subtitles);
         console.log(titles);
+        dispatch(
+          cacheResults({
+            iphone: [1, 2, 3],
+          })
+        );
       } else {
         console.error("No search suggestions found.");
       }
@@ -38,8 +50,6 @@ const Head = () => {
       console.error("Error fetching search suggestions:", error);
     }
   };
-
-  const dispatch = useDispatch();
 
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
@@ -69,6 +79,8 @@ const Head = () => {
           style={{ verticalAlign: "middle" }}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => setShowSuggestions(true)}
+          onBlur={() => setShowSuggestions(false)}
         />
         <button
           className="border h-10 border-gray-400 p-2 rounded-r-full "
@@ -76,7 +88,7 @@ const Head = () => {
         >
           <FaSearch />
         </button>
-        {(titles.length > 0 && searchQuery.length>0) && ( // Check if titles array is not empty
+        {titles.length > 0 && searchQuery.length > 0 && showSugesstions && (
           <div className="absolute bg-white px-2 py-5 w-1/2 z-10">
             <ul>
               <li className="px-2 py-2 ">
