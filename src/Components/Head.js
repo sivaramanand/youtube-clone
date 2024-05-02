@@ -4,30 +4,32 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { toggleMenu } from "../ultils/appSlice";
 import { GOOGLE_API_KEY } from "../ultils/constants";
-import { json } from "react-router-dom";
 import { cacheResults } from "../ultils/searchSlice";
+import { useNavigate } from "react-router-dom";
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [titles, setTitles] = useState([]);
-  const [showSugesstions, setShowSuggestions] = useState(true);
-  const SearchCache = useSelector((store) => store.search);
+  const [showSuggestions, setShowSuggestions] = useState(true);
+  const searchCache = useSelector((store) => store.search);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (searchQuery.trim() === "") {
       return;
     }
-    const timer = setTimeout(() => getSearchSugesstions(), 1600);
-    if (SearchCache[searchQuery]) {
-      setShowSuggestions(SearchCache[searchQuery]);
+    const timer = setTimeout(() => getSearchSuggestions(), 1600);
+    if (searchCache[searchQuery]) {
+      setShowSuggestions(searchCache[searchQuery]);
     } else {
-      getSearchSugesstions();
+      getSearchSuggestions();
     }
     return () => {
       clearTimeout(timer);
     };
   }, [searchQuery]);
-  const getSearchSugesstions = async () => {
-    console.log(searchQuery);
+
+  const navigate = useNavigate();
+  const getSearchSuggestions = async () => {
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${searchQuery}&key=${GOOGLE_API_KEY}`;
 
     try {
@@ -37,18 +39,17 @@ const Head = () => {
       if (Array.isArray(data.items) && data.items.length > 0) {
         const subtitles = data.items.map((item) => item.snippet.title);
         setTitles(subtitles);
-        console.log(titles);
-        dispatch(
-          cacheResults({
-            iphone: [1, 2, 3],
-          })
-        );
       } else {
         console.error("No search suggestions found.");
       }
     } catch (error) {
       console.error("Error fetching search suggestions:", error);
     }
+  };
+
+  const handleTitleClick = (title) => {
+    setSearchQuery(title);
+    setShowSuggestions(false); // Hide suggestions after selecting a title
   };
 
   const toggleMenuHandler = () => {
@@ -59,7 +60,7 @@ const Head = () => {
     <div className="grid grid-flow-col p-5 m-2 shadow-lg">
       <div className="flex col-span-1 text-center">
         <img
-          onClick={() => toggleMenuHandler()}
+          onClick={toggleMenuHandler}
           className="h-8 cursor-pointer"
           alt="menu"
           src="https://static.vecteezy.com/system/resources/previews/021/190/402/non_2x/hamburger-menu-filled-icon-in-transparent-background-basic-app-and-web-ui-bold-line-icon-eps10-free-vector.jpg"
@@ -68,6 +69,7 @@ const Head = () => {
           className="h-8"
           alt="youtube-logo"
           src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
+          onClick={() => navigate("/")}
         ></img>
       </div>
 
@@ -88,14 +90,19 @@ const Head = () => {
         >
           <FaSearch />
         </button>
-        {titles.length > 0 && searchQuery.length > 0 && showSugesstions && (
+        {titles.length > 0 && searchQuery.length > 0 && showSuggestions && (
           <div className="absolute bg-white px-2 py-5 w-1/2 z-10">
             <ul>
               <li className="px-2 py-2 ">
-                {titles.map((videotitles, index) => (
-                  <div key={index} className="flex items-center ">
+                {titles.map((videoTitle, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center "
+                    onClick={() => handleTitleClick(videoTitle)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <FaSearch className="mr-1" />
-                    {videotitles}
+                    {videoTitle}
                   </div>
                 ))}
               </li>
