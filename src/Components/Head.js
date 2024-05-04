@@ -3,32 +3,28 @@ import { FaSearch } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { toggleMenu } from "../ultils/appSlice";
+import { updateSearchResults } from "../ultils/searchSlice";
 import { GOOGLE_API_KEY } from "../ultils/constants";
-import { cacheResults } from "../ultils/searchSlice";
 import { useNavigate } from "react-router-dom";
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [SearchResults, setSearchResults] = useState([]);
   const [titles, setTitles] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const searchCache = useSelector((store) => store.search);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (searchQuery.trim() === "") {
+      setShowSuggestions(false); // Hide suggestions when query is empty
       return;
     }
     const timer = setTimeout(() => getSearchSuggestions(), 1600);
-    if (searchCache[searchQuery]) {
-      setShowSuggestions(searchCache[searchQuery]);
-    } else {
-      getSearchSuggestions();
-    }
     return () => {
       clearTimeout(timer);
     };
   }, [searchQuery]);
 
-  const navigate = useNavigate();
   const getSearchSuggestions = async () => {
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${searchQuery}&key=${GOOGLE_API_KEY}`;
 
@@ -39,23 +35,40 @@ const Head = () => {
       if (Array.isArray(data.items) && data.items.length > 0) {
         const subtitles = data.items.map((item) => item.snippet.title);
         setTitles(subtitles);
+        setShowSuggestions(true);
       } else {
+        setShowSuggestions(false);
         console.error("No search suggestions found.");
       }
     } catch (error) {
+      setShowSuggestions(false);
       console.error("Error fetching search suggestions:", error);
     }
   };
 
   const handleTitleClick = (title) => {
     setSearchQuery(title);
-    setShowSuggestions(false); // Hide suggestions after selecting a title
+    setShowSuggestions(false);
   };
-
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
+  const searchvideos = async () => {
+    const searchURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=30&q=${searchQuery}&key=${GOOGLE_API_KEY}`;
+    try {
+      const searchresponse = await fetch(searchURL);
+      const searchdata = await searchresponse.json();
+      setSearchResults(searchdata);
+      console.log(SearchResults);
+      setShowSuggestions(false);
 
+      dispatch(updateSearchResults(searchdata.items));
+      navigate(`/results?q=${encodeURIComponent(searchQuery)}`);
+    } catch (error) {
+      setShowSuggestions(false);
+      console.error("Error fetching search suggestions:", error);
+    }
+  };
   return (
     <div className="grid grid-flow-col p-5 m-2 shadow-lg">
       <div className="flex col-span-1 text-center">
@@ -82,40 +95,43 @@ const Head = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setShowSuggestions(true)}
-          onBlur={() => setShowSuggestions(false)}
+          // onBlur={() => setShowSuggestions(false)}
         />
+
         <button
           className="border h-10 border-gray-400 p-2 rounded-r-full "
           style={{ verticalAlign: "middle" }}
+          onClick={searchvideos}
         >
           <FaSearch />
         </button>
         {titles.length > 0 && searchQuery.length > 0 && showSuggestions && (
-          <div className="absolute bg-white px-2 py-5 w-1/2 z-10">
+          <div
+            className="absolute bg-white px-2 py-5 w-1/2 z-10"
+            onClick={() => setShowSuggestions(false)}
+          >
             <ul>
-              <li className="px-2 py-2 ">
-                {titles.map((videoTitle, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center "
-                    onClick={() => handleTitleClick(videoTitle)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <FaSearch className="mr-1" />
-                    {videoTitle}
-                  </div>
-                ))}
-              </li>
+              {titles.map((videotitles, index) => (
+                <li
+                  key={index}
+                  className="flex justify-between cursor-pointer mb-3"
+                  onClick={() => handleTitleClick(videotitles)}
+                >
+                  {videotitles}
+                </li>
+              ))}
             </ul>
           </div>
         )}
       </div>
       <div className="col-span-1 text-center">
-        <img
-          className="h-8"
-          alt="user-logo"
-          src="https://iconspng.com/_next/image?url=https%3A%2F%2Ficonspng.com%2Fimages%2Fabstract-user-icon-3%2Fabstract-user-icon-3.jpg&w=1080&q=75"
-        ></img>
+        <button>
+          <img
+            className="h-8"
+            alt="user-logo"
+            src="https://iconspng.com/_next/image?url=https%3A%2F%2Ficonspng.com%2Fimages%2Fabstract-user-icon-3%2Fabstract-user-icon-3.jpg&w=1080&q=75"
+          ></img>
+        </button>
       </div>
     </div>
   );
