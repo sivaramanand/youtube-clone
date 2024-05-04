@@ -16,7 +16,7 @@ const Head = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (searchQuery.trim() === "") {
-      setShowSuggestions(false); // Hide suggestions when query is empty
+      setShowSuggestions(false);
       return;
     }
     const timer = setTimeout(() => getSearchSuggestions(), 1600);
@@ -61,7 +61,6 @@ const Head = () => {
       setSearchResults(searchdata);
       console.log(SearchResults);
       setShowSuggestions(false);
-
       dispatch(updateSearchResults(searchdata.items));
       navigate(`/results?q=${encodeURIComponent(searchQuery)}`);
     } catch (error) {
@@ -69,6 +68,12 @@ const Head = () => {
       console.error("Error fetching search suggestions:", error);
     }
   };
+  const handleBlur = () => {
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 150); 
+  };
+  
   return (
     <div className="grid grid-flow-col p-5 m-2 shadow-lg">
       <div className="flex col-span-1 text-center">
@@ -95,7 +100,7 @@ const Head = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setShowSuggestions(true)}
-          // onBlur={() => setShowSuggestions(false)}
+          onBlur={handleBlur}
         />
 
         <button

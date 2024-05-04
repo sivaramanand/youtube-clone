@@ -1,6 +1,6 @@
 import "./App.css";
 import { Provider } from "react-redux";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Import BrowserRouter
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Head from "./Components/Head";
 import Body from "./Components/Body";
 import store from "./ultils/store";
@@ -10,7 +10,7 @@ import SearchResults from "./Components/SearchResults";
 function App() {
   return (
     <Provider store={store}>
-      <Router> {/* Wrap your components in BrowserRouter */}
+      <Router> 
         <div className="App">
           <Head />
           <Routes>
