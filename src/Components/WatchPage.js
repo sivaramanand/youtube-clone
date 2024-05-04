@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { YOUTUBE_VIDEOS_API } from "../ultils/constants";
 import { closeMenu } from "../ultils/appSlice";
 import { useSearchParams } from "react-router-dom";
 import CommentSection from "./CommentSection";
 import { GOOGLE_API_KEY } from "../ultils/constants"; // Ensure this is correctly imported
-
+import axios from "axios";
+import { Link } from "react-router-dom";
+import VideoCard from "./VideoCard";
 const WatchPage = () => {
   const [searchParams] = useSearchParams();
+  const [videos, setVideos] = useState([]);
   const videoId = searchParams.get("v");
   const [expanded, setExpanded] = useState(false);
   const [videoDetails, setVideoDetails] = useState({
@@ -18,6 +22,8 @@ const WatchPage = () => {
   useEffect(() => {
     dispatch(closeMenu());
     fetchVideoDetails();
+    getVideos();
+    window.scrollTo(0, 0);
   }, [videoId]);
 
   const fetchVideoDetails = async () => {
@@ -38,35 +44,56 @@ const WatchPage = () => {
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };
-  return (
-    <div className="pl-6 pt-6">
-      <iframe
-        width="660"
-        height="415"
-        src={`https://www.youtube.com/embed/${videoId}`}
-        title="YouTube video player"
-        frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-      ></iframe>
+  useEffect(() => {
+    getVideos();
+  }, []);
 
-      <div className="w-[50%]">
-        <h1 className="text-2xl font-bold mt-4 mb-2">{videoDetails.title}</h1>
-        <p className="text-base text-gray-700">
-          {videoDetails.description.length > 150 && !expanded
-            ? `${videoDetails.description.substring(0, 147)}... `
-            : videoDetails.description}
-          {videoDetails.description.length > 150 && (
-            <span
-              className="text-blue-500 cursor-pointer"
-              onClick={toggleExpanded}
-            >
-              {expanded ? "See Less" : "See More"}
-            </span>
-          )}
-        </p>
-        <CommentSection />
+  const getVideos = async () => {
+    try {
+      const response = await axios.get(YOUTUBE_VIDEOS_API);
+      setVideos(response.data.items);
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+  };
+  return (
+    <div className="flex ">
+      <div className="pl-6 pt-6">
+        <iframe
+          width="660"
+          height="415"
+          src={`https://www.youtube.com/embed/${videoId}`}
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        ></iframe>
+
+        <div className="w-[50%]">
+          <h1 className="text-2xl font-bold mt-4 mb-2">{videoDetails.title}</h1>
+          <p className="text-base text-gray-700">
+            {videoDetails.description.length > 150 && !expanded
+              ? `${videoDetails.description.substring(0, 147)}... `
+              : videoDetails.description}
+            {videoDetails.description.length > 150 && (
+              <span
+                className="text-blue-500 cursor-pointer"
+                onClick={toggleExpanded}
+              >
+                {expanded ? "See Less" : "See More"}
+              </span>
+            )}
+          </p>
+          <CommentSection />
+        </div>
+      </div>
+      <div className="mr-5">
+        {videos.map((vids) => (
+          <Link to={"/watch?v=" + vids.id}>
+            <VideoCard key={vids.id} info={vids} />
+          </Link>
+        ))}
       </div>
     </div>
   );
