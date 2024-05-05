@@ -2,14 +2,13 @@ import React from "react";
 
 const VideoCard = ({ info }) => {
   const { channelTitle, title, thumbnails } = info.snippet;
-  const { viewCount } = info.statistics;
+  // const { viewCount } = info.statistics;
   return (
-    <div className="p-2 m-2 w-80 shadow-lg">
+    <div className="p-2 m-2 w-80 shadow-lg h-80">
       <img alt="thumbnail" className="rounded-lg" src={thumbnails.medium.url} />
       <ul>
         <li className="font-bold">{title}</li>
         <li>{channelTitle}</li>
-        <li>{viewCount} Views</li>
       </ul>
     </div>
   );

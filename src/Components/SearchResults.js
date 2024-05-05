@@ -17,7 +17,7 @@ const SearchResults = () => {
   }, [query]);
 
   const fetchSearchResults = async (query) => {
-    const searchURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=30&q=${query}&key=${GOOGLE_API_KEY}`;
+    const searchURL = `https://www.googleapis.com/youtube/v3/search?part=snippet%2CcontentDetails%2Cstatistics&type=video&maxResults=30&q=${query}&key=${GOOGLE_API_KEY}`;
     try {
       const response = await fetch(searchURL);
       const data = await response.json();

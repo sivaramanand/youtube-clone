@@ -12,8 +12,12 @@ const searchSlice = createSlice({
     updateSearchResults: (state, action) => {
       state.results = action.payload;
     },
+    setSelectedTopic: (state, action) => {
+      state.selectedTopic = action.payload;
+    },
   },
 });
 
-export const { cacheResults, updateSearchResults } = searchSlice.actions;
+export const { cacheResults, updateSearchResults, setSelectedTopic } =
+  searchSlice.actions;
 export default searchSlice.reducer;
