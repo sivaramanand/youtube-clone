@@ -57,7 +57,7 @@ const WatchPage = () => {
     }
   };
   return (
-    <div className="flex ">
+    <div className="flex gap-16">
       <div className="pl-6 pt-6">
         <iframe
           width="660"
@@ -88,7 +88,7 @@ const WatchPage = () => {
           <CommentSection />
         </div>
       </div>
-      <div className="mr-5">
+      <div className="flex flex-col justify-center align-middle">
         {videos.map((vids) => (
           <Link to={"/watch?v=" + vids.id}>
             <VideoCard key={vids.id} info={vids} />

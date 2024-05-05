@@ -54,15 +54,15 @@ const Head = () => {
     dispatch(toggleMenu());
   };
   const searchvideos = async () => {
-    const searchURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=30&q=${searchQuery}&key=${GOOGLE_API_KEY}`;
+    const searchURL = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=15&q=${searchQuery}&key=${GOOGLE_API_KEY}`;
     try {
+      setShowSuggestions(false);
       const searchresponse = await fetch(searchURL);
       const searchdata = await searchresponse.json();
       setSearchResults(searchdata);
-      console.log(SearchResults);
-      setShowSuggestions(false);
       dispatch(updateSearchResults(searchdata.items));
       navigate(`/results?q=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("")
     } catch (error) {
       setShowSuggestions(false);
       console.error("Error fetching search suggestions:", error);
@@ -71,9 +71,9 @@ const Head = () => {
   const handleBlur = () => {
     setTimeout(() => {
       setShowSuggestions(false);
-    }, 150); 
+    }, 300);
   };
-  
+
   return (
     <div className="grid grid-flow-col p-5 m-2 shadow-lg">
       <div className="flex col-span-1 text-center">
