@@ -84,7 +84,7 @@ const Head = () => {
           src="https://static.vecteezy.com/system/resources/previews/021/190/402/non_2x/hamburger-menu-filled-icon-in-transparent-background-basic-app-and-web-ui-bold-line-icon-eps10-free-vector.jpg"
         ></img>
         <img
-          className="h-8"
+          className="h-8 cursor-pointer"
           alt="youtube-logo"
           src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
           onClick={() => navigate("/")}
