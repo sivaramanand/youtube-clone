@@ -57,11 +57,11 @@ const WatchPage = () => {
     }
   };
   return (
-    <div className="flex gap-16">
-      <div className="pl-6 pt-6">
+    <div className="flex w-full">
+      <div className="pl-6 pt-6 flex-grow" style={{ width: "70%" }}>
         <iframe
-          width="660"
-          height="415"
+          width="100%"
+          height="2.5%"
           src={`https://www.youtube.com/embed/${videoId}`}
           title="YouTube video player"
           frameBorder="0"
@@ -69,8 +69,7 @@ const WatchPage = () => {
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
         ></iframe>
-
-        <div className="w-[50%]">
+        <div className="w-full">
           <h1 className="text-2xl font-bold mt-4 mb-2">{videoDetails.title}</h1>
           <p className="text-base text-gray-700">
             {videoDetails.description.length > 150 && !expanded
@@ -88,7 +87,10 @@ const WatchPage = () => {
           <CommentSection />
         </div>
       </div>
-      <div className="flex flex-col justify-center align-middle">
+      <div
+        className="flex flex-col justify-center align-middle"
+        style={{ width: "30%" }}
+      >
         {videos.map((vids) => (
           <Link to={"/watch?v=" + vids.id}>
             <VideoCard key={vids.id} info={vids} />

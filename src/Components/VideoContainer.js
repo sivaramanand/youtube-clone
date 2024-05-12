@@ -15,6 +15,7 @@ const VideoContainer = () => {
         const response = await axios.get(YOUTUBE_VIDEOS_API);
         setVideos(response.data.items);
         window.scrollTo(0, 0);
+        console.log(videos,"fetchVideos");
       } catch (error) {
         console.error("Error fetching videos:", error);
       }
@@ -29,12 +30,14 @@ const VideoContainer = () => {
         );
         setVideos(response.data.items);
         window.scrollTo(0, 0);
+        console.log(videos,"fetchVideosForTopics");
+
       } catch (error) {
         console.error("Error fetching videos:", error);
       }
     };
 
-    if (selectedKeyword === "") {
+    if (selectedKeyword == "" || selectedKeyword == undefined) {
       fetchVideos();
     } else {
       fetchVideosForTopics();
@@ -44,10 +47,11 @@ const VideoContainer = () => {
   return (
     <div className="flex flex-wrap">
       {videos.map((video) => (
-        <Link key={video.id.videoId} to={`/watch?v=${video.id.videoId}`}>
+        <Link key={video.id} to={`/watch?v=${video.id}`}>
           <VideoCard info={video} />
         </Link>
-      ))}
+       
+      )) }
     </div>
   );
 };
