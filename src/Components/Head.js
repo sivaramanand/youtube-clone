@@ -6,14 +6,20 @@ import { toggleMenu } from "../ultils/appSlice";
 import { updateSearchResults } from "../ultils/searchSlice";
 import { GOOGLE_API_KEY } from "../ultils/constants";
 import { useNavigate } from "react-router-dom";
+import { setSelectedTopic } from "../ultils/searchSlice";
+import { YOUTUBE_VIDEOS_API } from "../ultils/constants";
+import axios from "axios";
+
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [SearchResults, setSearchResults] = useState([]);
   const [titles, setTitles] = useState([]);
+  const [videos, setVideos] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const searchCache = useSelector((store) => store.search);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setShowSuggestions(false);
@@ -24,7 +30,20 @@ const Head = () => {
       clearTimeout(timer);
     };
   }, [searchQuery]);
-
+  const fetchVideos = async () => {
+    try {
+      const response = await axios.get(YOUTUBE_VIDEOS_API);
+      const updatedVideos = response.data.items.map(video => ({
+        ...video,
+        videoId: video.id  
+      }));
+      console.log(updatedVideos)
+      setVideos(updatedVideos);
+      window.scrollTo(0, 0);
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+  };
   const getSearchSuggestions = async () => {
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${searchQuery}&key=${GOOGLE_API_KEY}`;
 
@@ -49,6 +68,7 @@ const Head = () => {
   const handleTitleClick = (title) => {
     setSearchQuery(title);
     setShowSuggestions(false);
+    searchvideos(title)
   };
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());

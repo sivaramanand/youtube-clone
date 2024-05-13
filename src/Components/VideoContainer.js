@@ -13,13 +13,18 @@ const VideoContainer = () => {
     const fetchVideos = async () => {
       try {
         const response = await axios.get(YOUTUBE_VIDEOS_API);
-        setVideos(response.data.items);
+        const updatedVideos = response.data.items.map(video => ({
+          ...video,
+          videoId: video.id  
+        }));
+        console.log(updatedVideos)
+        setVideos(updatedVideos);
         window.scrollTo(0, 0);
-        console.log(videos, "fetchVideos");
       } catch (error) {
         console.error("Error fetching videos:", error);
       }
     };
+
 
     const fetchVideosForTopics = async () => {
       try {
@@ -28,13 +33,18 @@ const VideoContainer = () => {
             selectedKeyword
           )}&key=${GOOGLE_API_KEY}`
         );
-        setVideos(response.data.items);
+        const updatedVideos = response.data.items.map(video => ({
+          ...video,
+          videoId: video.id.videoId  
+        }));
+        console.log(updatedVideos)
+        setVideos(updatedVideos);
         window.scrollTo(0, 0);
-        console.log(videos, "fetchVideosForTopics");
       } catch (error) {
         console.error("Error fetching videos:", error);
       }
     };
+
     if (
       selectedKeyword == "" ||
       selectedKeyword == undefined ||
@@ -49,7 +59,7 @@ const VideoContainer = () => {
   return (
     <div className={`flex flex-wrap ${isSidebarOpen ? "" : "w-full"}`}>
       {videos.map((video) => (
-        <Link key={video.id.videoId} to={`/watch?v=${video.id.videoId}`}>
+        <Link key={video.videoId} to={`/watch?v=${video.videoId}`}>
           <VideoCard info={video} />
         </Link>
       ))}

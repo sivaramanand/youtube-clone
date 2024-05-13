@@ -2,6 +2,14 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { setSelectedTopic } from "../ultils/searchSlice";
+import { SiYoutubeshorts } from "react-icons/si";
+import { MdLocalMovies } from "react-icons/md";
+import { BiSolidVideos } from "react-icons/bi";
+import { RiLiveFill } from "react-icons/ri";
+import { FaMusic } from "react-icons/fa";
+import { MdSportsCricket } from "react-icons/md";
+import { SiYoutubegaming } from "react-icons/si";
+
 const Sidebar = () => {
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
   const dispatch = useDispatch();
@@ -20,157 +28,194 @@ const Sidebar = () => {
           <Link to="/">Home</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer"
           onClick={() => handleTopicClick("Shorts")}
         >
-          Shorts
+          <div className="flex items-center gap-1">
+            <SiYoutubeshorts />
+            <h6 className="flex items-center">
+              {" "}
+              <Link to="/">Shorts</Link>
+            </h6>
+          </div>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("videos")}
         >
-          Videos
+          <div className="flex items-center gap-1">
+            <BiSolidVideos />
+            <h6 className="flex items-center">
+              {" "}
+              <Link to="/">Videos</Link>
+            </h6>
+          </div>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("live")}
         >
-          Live
+          <div className="flex items-center gap-1">
+            <RiLiveFill />
+            <h6 className="flex items-center">
+              <Link to="/">Live</Link>
+            </h6>
+          </div>
         </li>
       </ul>
       <h1 className="font-bold pt-5">Subscriptions</h1>
       <ul>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("music")}
         >
-          Music
+          <div className="flex items-center gap-1">
+            <FaMusic />
+            <h6 className="flex items-center">
+              <Link to="/">Music</Link>
+            </h6>
+          </div>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("sports")}
         >
-          Sports
+          <div className="flex items-center gap-1">
+            <MdSportsCricket />
+            <h6 className="flex items-center">
+              <Link to="/">Sports</Link>
+            </h6>
+          </div>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("gaming")}
         >
-          Gaming
+          <div className="flex items-center gap-1">
+            <SiYoutubegaming />
+            <h6 className="flex items-center">
+              <Link to="/">Gaming</Link>
+            </h6>
+          </div>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("movies")}
         >
-          Movies
+          <div className="flex items-center gap-1">
+            <MdLocalMovies />
+            <h6 className="flex items-center">
+              <Link to="/">Movies</Link>
+            </h6>
+          </div>
         </li>
       </ul>
       <h1 className="font-bold pt-5">Tech Youtubers</h1>
       <ul>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick(" Akshay Saini")}
         >
-          Akshay Saini
+          <Link to="/">Akshay Saini</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("Hitesh Chaoudary")}
         >
-          Hitesh Chaoudary
+          <Link to="/"> Hitesh Chaoudary</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("JV Lokesh Coding")}
         >
-          JV Lokesh Coding
+          <Link to="/"> JV Lokesh Coding</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick(" KG Coding")}
         >
-          KG Coding
+          <Link to="/"> KG Coding</Link>
         </li>
       </ul>
       <h1 className="font-bold pt-5">Technology</h1>
       <ul>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("react js")}
         >
-          React Js
+          <Link to="/"> React Js</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("javascript")}
         >
-          JavaScript
+          <Link to="/"> JavaScript</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("Java")}
         >
-          Java
+          <Link to="/"> Java</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("Kotlin")}
         >
-          Kotlin
+          <Link to="/"> Kotlin</Link>
         </li>
       </ul>
       <h1 className="font-bold pt-5">News</h1>
       <ul>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("Republic Tv")}
         >
-          Republic Tv
+          <Link to="/"> Republic Tv</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("ABC News")}
         >
-          ABC News
+          <Link to="/"> ABC News</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("India Today")}
         >
-          India Today
+          <Link to="/"> India Today</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("Times Now")}
         >
-          Times Now
+          <Link to="/"> Times Now</Link>
         </li>
       </ul>
       <h1 className="font-bold pt-5">Music</h1>
       <ul>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("Weekend")}
         >
-          Weekend
+          <Link to="/"> Weekend</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("Kendrick Lamar")}
         >
-          Kendrick Lamar
+          <Link to="/"> Kendrick Lamar</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("Taylor Swift")}
         >
-          Taylor Swift
+          <Link to="/"> Taylor Swift</Link>
         </li>
         <li
-          className="text-lg cursor-pointer mt-3"
+          className="text-lg cursor-pointer "
           onClick={() => handleTopicClick("Alan Walker")}
         >
-          Alan Walker
+          <Link to="/"> Alan Walker</Link>
         </li>
       </ul>
     </div>
