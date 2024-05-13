@@ -4,7 +4,7 @@ import { YOUTUBE_VIDEOS_API } from "../ultils/constants";
 import { closeMenu } from "../ultils/appSlice";
 import { useSearchParams } from "react-router-dom";
 import CommentSection from "./CommentSection";
-import { GOOGLE_API_KEY } from "../ultils/constants"; // Ensure this is correctly imported
+import { GOOGLE_API_KEY } from "../ultils/constants"; 
 import axios from "axios";
 import { Link } from "react-router-dom";
 import VideoCard from "./VideoCard";
@@ -61,7 +61,7 @@ const WatchPage = () => {
       <div className="pl-6 pt-6 flex-grow" style={{ width: "70%" }}>
         <iframe
           width="100%"
-          height="2.5%"
+          height="3.0%"
           src={`https://www.youtube.com/embed/${videoId}`}
           title="YouTube video player"
           frameBorder="0"

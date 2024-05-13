@@ -8,14 +8,14 @@ import { useSelector } from "react-redux";
 const VideoContainer = () => {
   const [videos, setVideos] = useState([]);
   const selectedKeyword = useSelector((state) => state.search.selectedTopic);
-
+  const isSidebarOpen = useSelector((state) => state.app.isMenuOpen);
   useEffect(() => {
     const fetchVideos = async () => {
       try {
         const response = await axios.get(YOUTUBE_VIDEOS_API);
         setVideos(response.data.items);
         window.scrollTo(0, 0);
-        console.log(videos,"fetchVideos");
+        console.log(videos, "fetchVideos");
       } catch (error) {
         console.error("Error fetching videos:", error);
       }
@@ -30,14 +30,16 @@ const VideoContainer = () => {
         );
         setVideos(response.data.items);
         window.scrollTo(0, 0);
-        console.log(videos,"fetchVideosForTopics");
-
+        console.log(videos, "fetchVideosForTopics");
       } catch (error) {
         console.error("Error fetching videos:", error);
       }
     };
-
-    if (selectedKeyword == "" || selectedKeyword == undefined) {
+    if (
+      selectedKeyword == "" ||
+      selectedKeyword == undefined ||
+      selectedKeyword == "home"
+    ) {
       fetchVideos();
     } else {
       fetchVideosForTopics();
@@ -45,13 +47,12 @@ const VideoContainer = () => {
   }, [selectedKeyword]);
 
   return (
-    <div className="flex flex-wrap">
+    <div className={`flex flex-wrap ${isSidebarOpen ? "" : "w-full"}`}>
       {videos.map((video) => (
-        <Link key={video.id} to={`/watch?v=${video.id}`}>
+        <Link key={video.id.videoId} to={`/watch?v=${video.id.videoId}`}>
           <VideoCard info={video} />
         </Link>
-       
-      )) }
+      ))}
     </div>
   );
 };

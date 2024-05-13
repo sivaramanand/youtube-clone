@@ -42,9 +42,9 @@ const SearchResults = () => {
               alt={item.snippet.title}
               className="w-36 h-68"
             />
-            <div className="ml-5 flex flex-col justify-between">
+            <div className="ml-5 flex flex-col ">
               <h2 className="text-lg font-bold">{item.snippet.title}</h2>
-              <h3>{item.snippet.channelTitle}</h3>
+              <h3 className="mt-4">{item.snippet.channelTitle}</h3>
             </div>
           </div>
         </Link>

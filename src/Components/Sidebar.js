@@ -9,12 +9,13 @@ const Sidebar = () => {
   const handleTopicClick = (topic) => {
     dispatch(setSelectedTopic(topic));
   };
+
   return (
     <div className="p-5 mx-4 shadow-lg w-48">
       <ul>
         <li
           className="font-bold pt-5 cursor-pointer"
-          onClick={() => handleTopicClick("")}
+          onClick={() => handleTopicClick("home")}
         >
           <Link to="/">Home</Link>
         </li>

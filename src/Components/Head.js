@@ -62,7 +62,7 @@ const Head = () => {
       setSearchResults(searchdata);
       dispatch(updateSearchResults(searchdata.items));
       navigate(`/results?q=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery("")
+      setSearchQuery("");
     } catch (error) {
       setShowSuggestions(false);
       console.error("Error fetching search suggestions:", error);
