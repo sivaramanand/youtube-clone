@@ -9,6 +9,7 @@ import { RiLiveFill } from "react-icons/ri";
 import { FaMusic } from "react-icons/fa";
 import { MdSportsCricket } from "react-icons/md";
 import { SiYoutubegaming } from "react-icons/si";
+import { IoHome } from "react-icons/io5";
 
 const Sidebar = () => {
   const isMenuOpen = useSelector((store) => store.app.isMenuOpen);
@@ -25,7 +26,12 @@ const Sidebar = () => {
           className="font-bold pt-5 cursor-pointer"
           onClick={() => handleTopicClick("home")}
         >
-          <Link to="/">Home</Link>
+          <div className="flex items-center gap-1">
+            <IoHome />
+            <h6 className="flex items-center">
+              <Link to="/">Home</Link>
+            </h6>
+          </div>
         </li>
         <li
           className="text-lg cursor-pointer"
