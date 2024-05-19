@@ -40,7 +40,6 @@ const Sidebar = () => {
           <div className="flex items-center gap-1">
             <SiYoutubeshorts />
             <h6 className="flex items-center">
-              {" "}
               <Link to="/">Shorts</Link>
             </h6>
           </div>
@@ -52,7 +51,6 @@ const Sidebar = () => {
           <div className="flex items-center gap-1">
             <BiSolidVideos />
             <h6 className="flex items-center">
-              {" "}
               <Link to="/">Videos</Link>
             </h6>
           </div>
