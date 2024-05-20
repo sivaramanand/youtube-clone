@@ -20,9 +20,7 @@ const VideoCard = ({ info }) => {
       <ul className="mt-3">
         <li className="font-bold">{title.slice(0, 50)}</li>
         <li className="mt-3">{channelTitle}</li>
-        <li className="mt-3">
-          {viewCount ? `${convertViewNumbers(viewCount)} views` : ""}
-        </li>
+        <li className="mt-3">{convertViewNumbers()} views</li>
       </ul>
     </div>
   );

@@ -36,9 +36,14 @@ const SearchResults = () => {
       const videoItems = data.items;
 
       const videoIds = videoItems.map((item) => item.id.videoId).join(",");
+      console.log(videoIds,"videoIds")
       const statsURL = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}&key=${GOOGLE_API_KEY}`;
+      console.log(statsURL)
       const statsResponse = await fetch(statsURL);
+      console.log(statsResponse)
       const statsData = await statsResponse.json();
+      console.log(statsData)
+
 
       const videosWithStats = videoItems.map((item) => {
         const stats = statsData.items.find(

@@ -130,7 +130,7 @@ const WatchPage = () => {
             </div>
           </div>
           <div className="flex justify-between items-center mb-4"></div>
-          <p className="text-base text-gray-700">
+          <p className="text-base text-gray-700 bg-gray-300 rounded-md p-4">
             {videoDetails.description.length > 150 && !expanded
               ? `${videoDetails.description.substring(0, 147)}... `
               : videoDetails.description}
