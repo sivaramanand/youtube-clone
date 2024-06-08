@@ -9,9 +9,9 @@ import { updateSearchResults } from "../ultils/searchSlice";
 const VideoContainer = () => {
   const dispatch = useDispatch();
   const [videos, setVideos] = useState([]);
-  const [videoStats, setVideoStats] = useState([]);
   const selectedKeyword = useSelector((state) => state.search.selectedTopic);
   const isSidebarOpen = useSelector((state) => state.app.isMenuOpen);
+
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -34,45 +34,36 @@ const VideoContainer = () => {
         const response = await fetch(searchURL);
         const data = await response.json();
         const videoItems = data.items;
+        console.log(videoItems);
 
-        const videoIds = videoItems.map((item) => item.id.videoId).join(",");
-        console.log(videoIds, "videoIds");
-        const statsURL = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}&key=${GOOGLE_API_KEY}`;
-        console.log(statsURL);
-        const statsResponse = await fetch(statsURL);
-        console.log(statsResponse);
-        const statsData = await statsResponse.json();
-        console.log(statsData);
-
-        const videosWithStats = videoItems.map((item) => {
-          const stats = statsData.items.find(
-            (statItem) => statItem.id === item.id.videoId
-          );
-          return {
-            ...item,
-            statistics: stats ? stats.statistics : {},
-          };
-        });
-
+        const videosWithStats = await Promise.all(
+          videoItems.map(async (item) => {
+            const statsURL = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${item.id.videoId}&key=${GOOGLE_API_KEY}`;
+            const statsResponse = await fetch(statsURL);
+            const statsData = await statsResponse.json();
+            const stats = statsData.items[0]?.statistics || {};
+            return {
+              ...item,
+              videoId: item.id.videoId,
+              statistics: stats,
+            };
+          })
+        );
+        console.log(videosWithStats);
         setVideos(videosWithStats);
         dispatch(updateSearchResults(videosWithStats));
-
         window.scrollTo(0, 0);
       } catch (error) {
         console.error("Error fetching videos:", error);
       }
     };
 
-    if (
-      selectedKeyword == "" ||
-      selectedKeyword == undefined ||
-      selectedKeyword == "home"
-    ) {
+    if (!selectedKeyword || selectedKeyword === "home") {
       fetchVideos();
     } else {
       fetchVideosForTopics();
     }
-  }, [selectedKeyword]);
+  }, [selectedKeyword, dispatch]);
 
   return (
     <div className={`flex flex-wrap ${isSidebarOpen ? "" : "w-full"}`}>
