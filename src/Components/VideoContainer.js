@@ -20,11 +20,22 @@ const VideoContainer = () => {
           ...video,
           videoId: video.id,
         }));
-        console.log(updatedVideos);
         setVideos(updatedVideos);
         window.scrollTo(0, 0);
       } catch (error) {
         console.error("Error fetching videos:", error);
+      }
+    };
+
+    const fetchVideoStats = async (videoId) => {
+      try {
+        const statsURL = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${GOOGLE_API_KEY}`;
+        const statsResponse = await fetch(statsURL);
+        const statsData = await statsResponse.json();
+        return statsData.items[0]?.statistics || {};
+      } catch (error) {
+        console.error("Error fetching video stats:", error);
+        return {};
       }
     };
 
@@ -34,22 +45,16 @@ const VideoContainer = () => {
         const response = await fetch(searchURL);
         const data = await response.json();
         const videoItems = data.items;
-        console.log(videoItems);
 
-        const videosWithStats = await Promise.all(
-          videoItems.map(async (item) => {
-            const statsURL = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${item.id.videoId}&key=${GOOGLE_API_KEY}`;
-            const statsResponse = await fetch(statsURL);
-            const statsData = await statsResponse.json();
-            const stats = statsData.items[0]?.statistics || {};
-            return {
-              ...item,
-              videoId: item.id.videoId,
-              statistics: stats,
-            };
-          })
-        );
-        console.log(videosWithStats);
+        const videosWithStats = await Promise.all(videoItems.map(async (item) => {
+          const stats = await fetchVideoStats(item.id.videoId);
+          return {
+            ...item,
+            videoId: item.id.videoId,
+            statistics: stats,
+          };
+        }));
+
         setVideos(videosWithStats);
         dispatch(updateSearchResults(videosWithStats));
         window.scrollTo(0, 0);
